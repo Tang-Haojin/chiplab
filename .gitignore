@@ -7,3 +7,11 @@ toolchains/*
 !toolchains/nemu
 software/random_res
 sims/verilator/run_func/single.log
+obj_dir
+obj
+log
+*.log
+*.out
+output
+*.mak
+software/func/func_lab*/inst/*.s
