@@ -45,13 +45,13 @@ soft_list=$(subst ${comma},${space},${RUN_SOFTWARE})
 
 all:env_test func 
 func:compile 
-	+make soft 
-	+make run
+	+$(MAKE) soft 
+	+$(MAKE) run
 compile:link 
-	+make -j8 verilator
-	+make testbench
+	+$(MAKE) -j8 verilator
+	+$(MAKE) testbench
 soft:soft_compile 
-	#+make golden_trace
+	#+$(MAKE) golden_trace
 run:simulation_run_func
 
 link:
@@ -225,7 +225,7 @@ verilator:${VERILATOR_SRC}
 	mkdir -p log
 	mkdir -p ${OBJ_DIR}
 	verilator ${VERILATOR_INCLUDE} ${WAVEOPTION} --savable --threads ${THREAD} -O3 -Wno-fatal -DSIMU -DSIMULATION=1 -Wall --trace -cc ${VFLAGS} ${SIMU_TOP_NAME}.v ${DIFFTEST}.v ${VERILATOR_SRC} 2>&1 | tee log/compile.log
-	make -C ${OBJ_DIR} -f "V${SIMU_TOP_NAME}.mk"
+	$(MAKE) -C ${OBJ_DIR} -f "V${SIMU_TOP_NAME}.mk"
 
 testbench:${TESTBENCH_SRC}/*.cpp 
 	@echo "============================================================================================================="
@@ -243,7 +243,7 @@ soft_compile:
 	@echo "============================================================================================================="
 	@for soft in ${soft_compile_list}; \
 	do 	\
-	make -C ${CHIPLAB_HOME}/software/$${soft} script; 	\
+	$(MAKE) -C ${CHIPLAB_HOME}/software/$${soft} script; 	\
 	rm -rf ./obj/$${soft}_obj;	\
 	mkdir -p ./obj/$${soft}_obj;  \
 	mv ${CHIPLAB_HOME}/software/$${soft}/obj ./obj/$${soft}_obj;	\
@@ -264,7 +264,7 @@ ifeq ('${TRACE_COMP}', 'y')
 	mv ./single.log ./tmp;	\
 	cp ./obj/$${soft}_obj/obj/test.s ./tmp;	\
 	cp ./log_script/* ./tmp;	\
-	make golden_trace_make -C ./tmp -f ../Makefile_run;	\
+	$(MAKE) golden_trace_make -C ./tmp -f ../Makefile_run;	\
 	mkdir -p ./log/$${soft}_log;	\
 	mv ./tmp/golden_trace.txt ./log/$${soft}_log/; \
 	rm -rf ./tmp;    \
@@ -285,7 +285,7 @@ ifeq ('${TRACE_COMP}', 'y')
 	cp ./obj/$${soft}_obj/obj/rom.vlog ./tmp;	\
 	touch ./tmp/ram.dat;\
 	cat ./tmp/rom.vlog > ./tmp/ram.dat;	\
-	make simulation_run_func -C ./tmp -f ../Makefile_run;	\
+	$(MAKE) simulation_run_func -C ./tmp -f ../Makefile_run;	\
 	mv ./tmp/simu_trace.txt* ./log/$${soft}_log/;	\
 	mv ./tmp/uart_output.txt ./log/$${soft}_log/;	\
 	mv ./tmp/uart_output.txt.real ./log/$${soft}_log/;	\
@@ -300,7 +300,7 @@ else
 	cp ./obj/$${soft}_obj/obj/rom.vlog ./tmp;	\
 	touch ./tmp/ram.dat;\
 	cat ./tmp/rom.vlog > ./tmp/ram.dat;	\
-	make simulation_run_func -C ./tmp -f ../Makefile_run;	\
+	$(MAKE) simulation_run_func -C ./tmp -f ../Makefile_run;	\
 	mkdir -p ./log/$${soft}_log;	\
 	mv ./tmp/simu_trace.txt* ./log/$${soft}_log/;	\
 	mv ./tmp/uart_output.txt ./log/$${soft}_log/;	\

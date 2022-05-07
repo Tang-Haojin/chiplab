@@ -6,7 +6,7 @@ DIRS :=$(filter-out Makefile,$(wildcard $(BASE)/*))
 all: $(DIRS)
 ifneq "$(MAKECMDGOALS)" "prepare"
 $(DIRS):
-	+make simulation_run_random -C $(notdir $@) -f ../../Makefile_run CASENAME=$(notdir $@)
+	+$(MAKE) simulation_run_random -C $(notdir $@) -f ../../Makefile_run CASENAME=$(notdir $@)
 else
 $(DIRS):
 	mkdir -p $(notdir $@)

@@ -53,9 +53,9 @@ space=${empty}
 
 all:random
 random:link
-	+make -j verilator
-	+make testbench
-	+make simulation_run_random
+	+$(MAKE) -j verilator
+	+$(MAKE) testbench
+	+$(MAKE) simulation_run_random
 
 link:config-generator.mak
 config-generator.mak:
@@ -164,7 +164,7 @@ verilator:${VERILATOR_SRC}
 	@echo "============================================================================================================="
 	@echo "============================================================================================================="
 	verilator ${VERILATOR_INCLUDE} ${WAVEOPTION} --threads ${THREAD} -O3 -Wno-fatal -DSIMU -DSIMULATION=1 -Wall --trace -cc ${VFLAGS} ${SIMU_TOP_NAME}.v ${DIFFTEST}.v ${VERILATOR_SRC}
-	+make -C ${OBJ_DIR} -f "V${SIMU_TOP_NAME}.mk"
+	+$(MAKE) -C ${OBJ_DIR} -f "V${SIMU_TOP_NAME}.mk"
 
 testbench:${TESTBENCH_SRC}/*.cpp 
 	@echo "============================================================================================================="
@@ -180,16 +180,16 @@ simulation_run_random:
 	@echo "RUN simulation..."
 	@echo "============================================================================================================="
 	@echo "============================================================================================================="
-	make all -C ../../../software/random_boot/ ./Makefile
-	make prepare -C ./run_random -f ./Makefile
-	make all -C ./run_random -f ./Makefile
+	$(MAKE) all -C ../../../software/random_boot/ ./Makefile
+	$(MAKE) prepare -C ./run_random -f ./Makefile
+	$(MAKE) all -C ./run_random -f ./Makefile
 	mv ./log/result.txt ./log/${RUN_TIME}-result.txt
 
 
 clean:
 	rm -f output & rm -rf obj_dir &	\
-	make clean -C ./run_random -f ./Makefile
-	make clean -C ../../../software/random_boot/ ./Makefile
+	$(MAKE) clean -C ./run_random -f ./Makefile
+	$(MAKE) clean -C ../../../software/random_boot/ ./Makefile
 	rm -rf ./tmp 
 	rm -rf log/*
 
@@ -200,6 +200,6 @@ clean_all:
 	rm -rf obj 
 	rm -f config-generator.mak 
 	rm -f config.log
-	make clean -C ./run_random -f ./Makefile
-	make clean -C ../../../software/random_boot/ ./Makefile
+	$(MAKE) clean -C ./run_random -f ./Makefile
+	$(MAKE) clean -C ../../../software/random_boot/ ./Makefile
 

@@ -20,7 +20,7 @@ soft_compile:
 	@echo "============================================================================================================="
 	@for soft in ${soft_list}; \
 	do 	\
-	make -C ${LAB_HOME}/software/$${soft} script; 	\
+	$(MAKE) -C ${LAB_HOME}/software/$${soft} script; 	\
 	rm -rf ./obj/$${soft}_obj;	\
 	mv ${LAB_HOME}/software/$${soft}/obj ./obj/$${soft}_obj;	\
 	done 

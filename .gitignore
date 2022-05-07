@@ -13,5 +13,5 @@ log
 *.log
 *.out
 output
+tmp
 *.mak
-software/func/func_lab*/inst/*.s

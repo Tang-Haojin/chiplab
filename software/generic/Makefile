@@ -1,9 +1,15 @@
 include ../../../sims/verilator/run_func/config-software.mak
 
-#all: haha libinst.a raw
-all: raw libinst.a haha
-
 GCC_BIN=../../../toolchains/loongarch32_gnu/install/bin
+
+libinst.a: obj/start.o
+	$(MAKE) -C inst $@
+	
+obj/start.o: raw
+	${GCC_BIN}/loongarch32-linux-gnu-as -mabi=ilp32 obj/start.s -o obj/start.o
+
+raw:
+	$(MAKE) -C obj $@ -f ../inst/Makefile
 
 script:
 	./script.sh
@@ -22,28 +28,19 @@ else
 		-S start.S > obj/start.s 
 endif
 
-haha:
-	${GCC_BIN}/loongarch32-linux-gnu-as -mabi=ilp32 obj/start.s -o obj/start.o
-
-libinst.a:
-	make -C inst $@
-
-raw:
-	make -C obj $@ -f ../inst/Makefile
-
 clean:
 	rm -f *.o *.a 
 	rm start.s
 	rm -rf obj
-	make -C inst clean 
+	$(MAKE) -C inst clean 
 
 clean_no_obj:
 	rm -f *.o *.a 
 	rm obj/start.s
-	make -C inst clean 
+	$(MAKE) -C inst clean 
 
 reset:
-	make clean
+	$(MAKE) clean
 	rm -f bin.lds convert
 
 help:
